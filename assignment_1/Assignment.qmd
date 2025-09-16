@@ -1,0 +1,91 @@
+---
+title: "Assignment 1"
+author: "Trinh Nhat Minh Le"
+format: html
+editor: visual
+---
+
+# 1. Git and GitHub
+
+URL to my assignment's directory on GitHub: <https://github.com/minhclone4641/econ_3201>.
+
+# 2. Latex
+
+#### Rewrite mentioned equations in Latex
+
+(a) $E(Y) = y_1p_1 + ... + y_kp_k = \sum_{i=1}^ky_ip_i$.
+
+(b) $\sigma_Y = Var(Y) = E[(Y - \mu_y)^2] = \sum_{i=1}^k(y_i-\mu_y)^2p_i$
+
+(c) $\hat{\beta} = \frac{\sum_{i=1}^n(y-y_i)(x-x_i)}{\sum_{i=1}^n(x-x_i)^2}$
+
+(d) $P(a \leq Y \leq b) = \int_{a}^{b}f_Y(y)dy$
+
+(e) $\hat{g}(x) = \frac
+{\frac{1}{nh}\sum_{i=1}^n y_ik(\frac{x_i-x}{h})}
+{\frac{1}{nh}\sum_{i=1}^n k(\frac{x_i-x}{h})}$
+
+# 3. R
+
+### 3.1 Assignment
+
+#### (a) Set the sample size
+
+```{r}
+n <- 1000
+```
+
+#### (b) Generate 2 random variables $u_1$ and $u_2$
+
+#### With n/2 = 500 observations, \~U(0,1)
+
+```{r}
+u1 <- runif(n/2,0,1) 
+u2 <- runif(n/2,0,1)
+
+```
+
+#### (c) Generate z1 and z2
+
+```{r}
+z1 <- sqrt(-2*log(u1))*cos(2*pi*u2)
+z2 <- sqrt(-2*log(u1))*sin(2*pi*u2)
+```
+
+#### (d) Generate a vector z =\[z1,z2\]
+
+```{r}
+z <- c(z1,z2)
+```
+
+#### (e) Generate two variables $\mu$ and $\sigma$. set $\mu = 5$ and $\sigma =2$
+
+```{r}
+mu <- 5
+sigma <- 2
+```
+
+#### (f) Generate a varieble $x = \mu + \sigma x z$
+
+```{r}
+x <- mu + sigma * z
+```
+
+#### (g) Calculate the mean and standard deviation of x
+
+```{r}
+mean(x)
+sd(x)
+```
+#### Plot a histogram of 𝑥 with the normal distribution curve
+
+```{r}
+hist(x,
+freq = FALSE,
+ylab = "Density",
+xlab = "$x$")
+curve(dnorm(x, mean = mu, sd = sigma),
+col = "red", lwd = 2, add = TRUE)
+```
+
+### 3.2 Data frames and Indexing
