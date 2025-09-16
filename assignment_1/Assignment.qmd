@@ -77,6 +77,7 @@ x <- mu + sigma * z
 mean(x)
 sd(x)
 ```
+
 #### Plot a histogram of 𝑥 with the normal distribution curve
 
 ```{r}
@@ -89,3 +90,72 @@ col = "red", lwd = 2, add = TRUE)
 ```
 
 ### 3.2 Data frames and Indexing
+
+#### Load data set df
+
+```{r}
+df <- read.csv("hlthexp.csv")
+```
+
+#### (a) Determine if there are any missing values for the variable Hospitals
+
+```{r}
+any(is.na(df$Hospitals))
+```
+
+#### (b) Add a variable called “Total Other Services” to the data frame df
+
+```{r}
+df$Total.Other.Service <- df$Dental + df$Vision + df$Other.professional
+```
+
+### 3.3. Other useful R commands.
+
+#### Load the mpg dataset from the ggplot2 package
+
+```{r}
+mpg <-ggplot2::mpg
+```
+
+#### (a) Subset the data to include only observations from 2008.
+
+```{r}
+subset(mpg, year == 2008)
+mpg_2008 <- subset(mpg, year == 2008)
+```
+
+#### Calculate the maximum and minimum miles per gallon in city limits
+
+```{r}
+#for cty's observations from 2008
+max(mpg_2008$cty,na.rm = TRUE)
+min(mpg_2008$cty,na.rm = TRUE)
+
+#for all cty's observations
+max(mpg$cty,na.rm = TRUE)
+min(mpg$cty,na.rm = TRUE)
+```
+#### (b) Estimate the average miles per gallon within city limits for cars produced in 2008 
+#### Using average formula
+```{r}
+sum(mpg_2008$cty)/length(mpg_2008$cty)
+```
+
+#### (c) Estimate the average miles per gallon within city limits for cars produced in 2008
+#### Using mean()
+```{r}
+mean(mpg_2008$cty)
+```
+
+#### (d) Create a variable called compact
+
+```{r}
+compact <- ifelse(mpg$class == "compact",1,0)
+```
+
+#### (e) Estimate the average miles per gallon within city limits for compact cars.
+
+```{r}
+mean(subset(mpg, mpg$class == "compact")$cty)
+```
+
