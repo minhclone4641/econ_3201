@@ -1,6 +1,8 @@
 ---
-title: "Assignment 1"
-author: "Trinh Nhat Minh Le"
+title: "ECON-3201 - Assignment 1"
+author:
+  - name: "Trinh Nhat Minh Le"
+    affiliation: "Student ID: 3203151"
 format: html
 editor: visual
 ---
@@ -9,7 +11,7 @@ editor: visual
 
 URL to my assignment's directory on GitHub: <https://github.com/minhclone4641/econ_3201>.
 
-# 2. Latex
+# 2. LaTeX
 
 #### Rewrite mentioned equations in Latex
 
@@ -35,9 +37,7 @@ URL to my assignment's directory on GitHub: <https://github.com/minhclone4641/ec
 n <- 1000
 ```
 
-#### (b) Generate 2 random variables $u_1$ and $u_2$
-
-#### With n/2 = 500 observations, \~U(0,1)
+#### (b) Generate 2 random variables $u_1$ and $u_2$ With n/2 = 500 observations, \~U(0,1)
 
 ```{r}
 u1 <- runif(n/2,0,1) 
@@ -65,7 +65,7 @@ mu <- 5
 sigma <- 2
 ```
 
-#### (f) Generate a varieble $x = \mu + \sigma x z$
+#### (f) Generate a variable $x = \mu + \sigma x z$
 
 ```{r}
 x <- mu + sigma * z
@@ -78,7 +78,7 @@ mean(x)
 sd(x)
 ```
 
-#### Plot a histogram of 𝑥 with the normal distribution curve
+#### (h) Plot a histogram of 𝑥 with the normal distribution curve
 
 ```{r}
 hist(x,
@@ -91,22 +91,57 @@ col = "red", lwd = 2, add = TRUE)
 
 ### 3.2 Data frames and Indexing
 
-#### Load data set df
+#### Load data set df from "hlthexp.csv" and adjust to match "table 1" in PDF
 
 ```{r}
-df <- read.csv("hlthexp.csv")
+cihi <- read.csv("hlthexp.csv")
+
+df <- data.frame(Year = cihi$Year,
+                 Hospitals = cihi$Hospitals,
+                 Physicians = cihi$Physicians,
+                 "Other Services" = cihi$Other.Institutions,
+                 Dental = cihi$Other.Professionals..Dental.Services,
+                 Vision = cihi$Other.Professionals..Vision.Care.Services,
+                 "Other Professionals" = cihi$Other.Professionals..Other.Services,
+                 check.names = FALSE)
 ```
 
 #### (a) Determine if there are any missing values for the variable Hospitals
 
 ```{r}
 any(is.na(df$Hospitals))
+sum(is.na(df$Hospitals))
 ```
 
 #### (b) Add a variable called “Total Other Services” to the data frame df
 
 ```{r}
-df$Total.Other.Service <- df$Dental + df$Vision + df$Other.professional
+df$'Total Other Services' <- df$Dental + df$Vision + df$"Other Professionals"
+head(df)
+```
+
+#### (c)
+
+#### (d) Add the variable “Prescription Drugs” to the df data frame using the append method
+
+```{r}
+df <- data.frame(df,
+                 'Prescription Drugs' = cihi$Prescribed.Drugs,
+                 check.names = FALSE)
+head(df)
+```
+
+#### (e) Using a single R command, determine the expenditure on hospitals in 1983
+
+```{r}
+df$Hospitals[df$Year == 1983]
+```
+
+#### (f) Using a singe R command, list the expenditures by year for 2012-2022.
+
+```{r}
+subset(df,
+       df$Year >= 2012 & df$Year <= 2022)
 ```
 
 ### 3.3. Other useful R commands.
@@ -120,7 +155,6 @@ mpg <-ggplot2::mpg
 #### (a) Subset the data to include only observations from 2008.
 
 ```{r}
-subset(mpg, year == 2008)
 mpg_2008 <- subset(mpg, year == 2008)
 ```
 
@@ -128,21 +162,24 @@ mpg_2008 <- subset(mpg, year == 2008)
 
 ```{r}
 #for cty's observations from 2008
+
 max(mpg_2008$cty,na.rm = TRUE)
 min(mpg_2008$cty,na.rm = TRUE)
 
 #for all cty's observations
+
 max(mpg$cty,na.rm = TRUE)
 min(mpg$cty,na.rm = TRUE)
 ```
-#### (b) Estimate the average miles per gallon within city limits for cars produced in 2008 
-#### Using average formula
+
+#### (b) Estimate the average miles per gallon within city limits for cars produced in 2008 Using average formula
+
 ```{r}
 sum(mpg_2008$cty)/length(mpg_2008$cty)
 ```
 
-#### (c) Estimate the average miles per gallon within city limits for cars produced in 2008
-#### Using mean()
+#### (c) Estimate the average miles per gallon within city limits for cars produced in 2008 Using mean()
+
 ```{r}
 mean(mpg_2008$cty)
 ```
@@ -150,12 +187,39 @@ mean(mpg_2008$cty)
 #### (d) Create a variable called compact
 
 ```{r}
-compact <- ifelse(mpg$class == "compact",1,0)
+mpg$compact <- ifelse(mpg$class == "compact",1,0)
 ```
 
 #### (e) Estimate the average miles per gallon within city limits for compact cars.
 
 ```{r}
-mean(subset(mpg, mpg$class == "compact")$cty)
+# method 1
+mean(mpg$cty[mpg$compact == 1], na.rm = TRUE)
 ```
 
+```{r}
+# method 2
+mean(subset(mpg,mpg$class == "compact")$cty)
+```
+
+#### (f) Create a simple scatter plot with city mpg (cty) on the x-axis and highway mpg (hwy) on the y-axis.
+
+```{r}
+#| label: fig-1
+#| fig-cap: "City Versus Highway Fuel Efficiency (MPG)"
+
+plot(mpg$cty,
+     mpg$hwy,
+     
+     #(i) Change the x-axis label using the option xlab = "City MPG"
+     # and change the y-axis label using the option ylab = "Highway MPG"
+     
+     xlab = "City MPG",
+     ylab = "Highway MPG",
+     
+     #(ii) Add the caption “City Versus Highway Fuel Efficiency (MPG)”
+     
+     main = "City Versus Highway Fuel Efficiency (MPG)")
+```
+
+Figure @fig-1 shows the fuel efficiency for city driving versus highway driving.
