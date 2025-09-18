@@ -222,4 +222,6 @@ plot(mpg$cty,
      main = "City Versus Highway Fuel Efficiency (MPG)")
 ```
 
+###### (iii) Cross reference the figure and add the text
+
 Figure @fig-1 shows the fuel efficiency for city driving versus highway driving.
