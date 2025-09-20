@@ -1,11 +1,13 @@
 ---
 title: "ECON-3201 - Assignment 1"
-author:
-  - name: "Trinh Nhat Minh Le"
-    affiliation: "Student ID: 3203151"
-format: html
+author: Trinh Nhat Minh Le
+format: pdf
 editor: visual
 ---
+
+**Name: Trinh Nhat Minh Le**
+
+**Student ID: 3203151**
 
 # 1. Git and GitHub
 
@@ -120,7 +122,7 @@ df$'Total Other Services' <- df$Dental + df$Vision + df$"Other Professionals"
 head(df)
 ```
 
-#### (c)
+#### (c) Skip as per instructed
 
 #### (d) Add the variable “Prescription Drugs” to the df data frame using the append method
 
