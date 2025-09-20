@@ -1,0 +1,228 @@
+---
+title: "ECON-3201 - Assignment 1"
+author: Trinh Nhat Minh Le
+format: pdf
+editor: visual
+---
+
+**Name: Trinh Nhat Minh Le**
+
+**Student ID: 3203151**
+
+# 1. Git and GitHub
+
+URL to my assignment's directory on GitHub: <https://github.com/minhclone4641/econ_3201>.
+
+# 2. LaTeX
+
+#### Rewrite mentioned equations in Latex
+
+(a) $E(Y) = y_1p_1 + ... + y_kp_k = \sum_{i=1}^ky_ip_i$.
+
+(b) $\sigma_Y = Var(Y) = E[(Y - \mu_y)^2] = \sum_{i=1}^k(y_i-\mu_y)^2p_i$
+
+(c) $\hat{\beta} = \frac{\sum_{i=1}^n(y-y_i)(x-x_i)}{\sum_{i=1}^n(x-x_i)^2}$
+
+(d) $P(a \leq Y \leq b) = \int_{a}^{b}f_Y(y)dy$
+
+(e) $\hat{g}(x) = \frac
+{\frac{1}{nh}\sum_{i=1}^n y_ik(\frac{x_i-x}{h})}
+{\frac{1}{nh}\sum_{i=1}^n k(\frac{x_i-x}{h})}$
+
+# 3. R
+
+### 3.1 Assignment
+
+#### (a) Set the sample size
+
+```{r}
+n <- 1000
+```
+
+#### (b) Generate 2 random variables $u_1$ and $u_2$ With n/2 = 500 observations, \~U(0,1)
+
+```{r}
+u1 <- runif(n/2,0,1) 
+u2 <- runif(n/2,0,1)
+```
+
+#### (c) Generate z1 and z2
+
+```{r}
+z1 <- sqrt(-2*log(u1))*cos(2*pi*u2)
+z2 <- sqrt(-2*log(u1))*sin(2*pi*u2)
+```
+
+#### (d) Generate a vector z =\[z1,z2\]
+
+```{r}
+z <- c(z1,z2)
+```
+
+#### (e) Generate two variables $\mu$ and $\sigma$. set $\mu = 5$ and $\sigma =2$
+
+```{r}
+mu <- 5
+sigma <- 2
+```
+
+#### (f) Generate a variable $x = \mu + \sigma * z$
+
+```{r}
+x <- mu + sigma * z
+```
+
+#### (g) Calculate the mean and standard deviation of x
+
+```{r}
+mean(x)
+sd(x)
+```
+
+#### (h) Plot a histogram of 𝑥 with the normal distribution curve
+
+```{r}
+hist(x,
+freq = FALSE,
+ylab = "Density",
+xlab = TeX("$x$"))
+curve(dnorm(x, mean = mu, sd = sigma),
+col = "red", lwd = 2, add = TRUE)
+```
+
+### 3.2 Data frames and Indexing
+
+#### Load data set df from "hlthexp.csv" and adjust to match "table 1" in PDF
+
+```{r}
+cihi <- read.csv("hlthexp.csv")
+
+df <- data.frame(Year = cihi$Year,
+                 Hospitals = cihi$Hospitals,
+                 Physicians = cihi$Physicians,
+                 "Other Services" = cihi$Other.Institutions,
+                 Dental = cihi$Other.Professionals..Dental.Services,
+                 Vision = cihi$Other.Professionals..Vision.Care.Services,
+                 "Other Professionals" = cihi$Other.Professionals..Other.Services,
+                 check.names = FALSE)
+```
+
+#### (a) Determine if there are any missing values for the variable Hospitals
+
+```{r}
+any(is.na(df$Hospitals))
+sum(is.na(df$Hospitals))
+```
+
+#### (b) Add a variable called “Total Other Services” to the data frame df
+
+```{r}
+df$'Total Other Services' <- df$Dental + df$Vision + df$"Other Professionals"
+head(df)
+```
+
+#### (c) Skip as instructed
+
+#### (d) Add the variable “Prescription Drugs” to the df data frame using the append method
+
+```{r}
+df <- data.frame(df,
+                 'Prescription Drugs' = cihi$Prescribed.Drugs,
+                 check.names = FALSE)
+head(df)
+```
+
+#### (e) Using a single R command, determine the expenditure on hospitals in 1983
+
+```{r}
+df$Hospitals[df$Year == 1983]
+```
+
+#### (f) Using a singe R command, list the expenditures by year for 2012-2022.
+
+```{r}
+subset(df,
+       df$Year >= 2012 & df$Year <= 2022)
+```
+
+### 3.3. Other useful R commands.
+
+#### Load the mpg dataset from the ggplot2 package
+
+```{r}
+mpg <-ggplot2::mpg
+```
+
+#### (a) Subset the data to include only observations from 2008.
+
+```{r}
+mpg_2008 <- subset(mpg, year == 2008)
+```
+
+#### Calculate the maximum and minimum miles per gallon in city limits
+
+```{r}
+#for cty's observations from 2008
+
+max(mpg_2008$cty,na.rm = TRUE)
+min(mpg_2008$cty,na.rm = TRUE)
+
+#for all cty's observations
+
+max(mpg$cty,na.rm = TRUE)
+min(mpg$cty,na.rm = TRUE)
+```
+
+#### (b) Estimate the average miles per gallon within city limits for cars produced in 2008 Using average formula
+
+```{r}
+sum(mpg_2008$cty)/length(mpg_2008$cty)
+```
+
+#### (c) Estimate the average miles per gallon within city limits for cars produced in 2008 Using mean()
+
+```{r}
+mean(mpg_2008$cty)
+```
+
+#### (d) Create a variable called compact
+
+```{r}
+mpg$compact <- ifelse(mpg$class == "compact",1,0)
+```
+
+#### (e) Estimate the average miles per gallon within city limits for compact cars.
+
+```{r}
+# method 1
+mean(mpg$cty[mpg$compact == 1], na.rm = TRUE)
+```
+
+```{r}
+# method 2
+mean(subset(mpg,mpg$class == "compact")$cty)
+```
+
+#### (f) Create a simple scatter plot with city mpg (cty) on the x-axis and highway mpg (hwy) on the y-axis.
+
+```{r}
+#| label: fig-1
+#| fig-cap: "City Versus Highway Fuel Efficiency (MPG)"
+
+plot(mpg$cty,
+     mpg$hwy,
+     
+     #(i) Change the x-axis label using the option xlab = "City MPG"
+     # and change the y-axis label using the option ylab = "Highway MPG"
+     
+     xlab = "City MPG",
+     ylab = "Highway MPG",
+     
+     #(ii) Add the caption “City Versus Highway Fuel Efficiency (MPG)”
+     
+     main = "City Versus Highway Fuel Efficiency (MPG)")
+```
+
+###### (iii) Cross reference the figure and add the text
+
+Figure @fig-1 shows the fuel efficiency for city driving versus highway driving.
